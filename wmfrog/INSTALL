@@ -1,0 +1,31 @@
+Installation instructions for wmFrog.
+
+Requirements
+-------------------------------------------------------------------------------
+wmFrog requires the Xpm library (which should be available on most machines
+with XFree86 installed). And it requires that the GNU wget utility be installed
+as well. wget is a utility that allows you to grab stuff like html files and
+images diretly off the www without using a graphical browser. (Also, you
+obviously need to be connected to internet in a way that wget will work.)
+You also need to have Perl installed.
+
+On FreeBSD systems you may need to use gmake instead of make.
+
+Installation
+-------------------------------------------------------------------------------
+If you have a copy of wmFrog already running you should sut it down before re-installing.
+
+1) gunzip wmFrog-x.x.x.tar.gz
+1) tar -xvf wmFrog-x.x.x.tar
+2) cd wmFrog/Src/
+3) make clean
+4) make 
+5) make install  (as root).
+6) wmfrog -h & (or 'wmfrog -h' for help)
+7) You need to set the location of perl correctly in /usr/lib/wmfrog if your perl
+   is located in a place other than /usr/bin/
+
+
+
+
+

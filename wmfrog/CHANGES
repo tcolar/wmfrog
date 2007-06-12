@@ -1,0 +1,20 @@
+
+Version         Description
+-------------------------------------------------------------------------
+0.1.6		*** Application name changed to wmfrog instead of wmFrog ***
+		Man page added by Marc Brockschmidt
+		Change where made to the data fetching script, so that no more eroneous temperatures should be reported (visibility as fractions problems)
+		Debian package creation, Makefile cleanup, etc.
+0.1.5		Fixed CPU deadlock (100% use)
+		Failed retrieval keeps previous values valid
+		Invalid values are ignored
+0.1.4		Fix bug when temp > 100F
+		Added the "Label" option
+0.1.3		Updated for new NOAA website
+0.1.2		Fixed Artworks artifacts and Makefile.
+		Removed strsep dependency.
+0.1.1           Artworks from Mathieu Roy
+		UTC time by default.
+		"make install" added.
+0.1.0		First Release.
+0.0.9		Added parameters.

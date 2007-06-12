@@ -1,0 +1,33 @@
+
+[executer]
+RunInTerminal=true
+
+[Project State]
+clean before build=false
+
+[filelist]
+0=/home/thibautc/Desktop/wmFrog/Src/wmFrog.c
+1=/home/thibautc/Desktop/wmFrog/INSTALL
+2=/home/thibautc/Desktop/wmFrog/Src/frog.xpm
+
+[filenumbers]
+0=97
+1=1
+2=1
+
+[filemarkers]
+0=
+1=
+2=
+
+[File View]
+filter.file.unmatch=*.so *.o *.a *.la
+filter.file.ignore.hidden=0
+filter.dir.ignore.hidden=0
+
+[Project Tree]
+0=0
+1=0:1
+
+[File Tree]
+0=0
