@@ -1,15 +1,9 @@
 #!/bin/sh
-
-#clean
 rm Src/*.o Src/wmfrog
-
-#source tgz in dist
-tar czvf dist/wmfrog.tgz Src CHANGES COPYING HINTS INSTALL
-
-#build and copy to dist
+tar czvf dist/wmfrog.tgz --exclude='*.svn' Src CHANGES COPYING HINTS INSTALL
 cd Src
+make clean
 make
-cp wmfrog dist
-cp weather.pl dist
-
-#deb  TBD
+cd ..
+cp Src/wmfrog dist
+cp Src/weather.pl dist

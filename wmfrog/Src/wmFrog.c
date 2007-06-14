@@ -95,7 +95,7 @@ FILE		*fp;
   int q;
 
 	folder=GetTempDir(".wmapps");
-	fprintf(stderr,"User dir: %s\n",folder);
+	//fprintf(stderr,"User dir: %s\n",folder);
 
     /*
      *  Parse any command line arguments.
