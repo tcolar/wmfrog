@@ -1,4 +1,4 @@
-# $Header: /home/cvsroot/gentoo-x86/x11-plugins/wmfrog/wmfrog-0.1.6.ebuild
+# $Header: /home/cvsroot/gentoo-x86/x11-plugins/wmfrog/wmfrog-0.2.0.ebuild
 
 DESCRIPTION="Dockable graphical weather application for Windowmaker/Fluxbox, etc ..."
 SRC_URI="http://www.colar.net/wmapps/${P}.tgz"

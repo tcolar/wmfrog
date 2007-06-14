@@ -1,5 +1,8 @@
 Installation instructions for wmFrog.
 
+Thibaut Colar
+http://www.colar.net/wmapps/
+
 Requirements
 -------------------------------------------------------------------------------
 wmFrog requires the Xpm library (which should be available on most machines
@@ -10,6 +13,10 @@ obviously need to be connected to internet in a way that wget will work.)
 You also need to have Perl installed.
 
 On FreeBSD systems you may need to use gmake instead of make.
+
+To compile it from sources, you will need: make, gcc, libc6, libxpm-dev, libx11-dev, libxext-dev.
+ie: apt-get install libxpm-dev, libx11-dev, libxext-dev
+To run it you will need: perl, wget, libx11-6, libxext6 and libxpm4.
 
 Installation
 -------------------------------------------------------------------------------
@@ -23,9 +30,20 @@ If you have a copy of wmFrog already running you should sut it down before re-in
 5) make install  (as root).
 6) wmfrog -h & (or 'wmfrog -h' for help)
 7) You need to set the location of perl correctly in /usr/lib/wmfrog if your perl
-   is located in a place other than /usr/bin/
+   is not located in /usr/bin/
 
 
+Use
+--------------------------------------------------------------------------------
+Find your METAR station name here: 
+http://www.nws.noaa.gov/tg/siteloc.shtml
+For example Reno, NV is KRNO
+Also you will want to set your Time offset from UTC(GMT), for example Pacific time is GMT+8, so offset is 8
+
+Start wmfrog, for example
+wmfrog -s KRNO -o 8
+
+See wmfrog -h for many more options.
 
 
 
