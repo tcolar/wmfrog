@@ -1,6 +1,7 @@
 #!/bin/sh
+read -p "Version:" version
 rm Src/*.o Src/wmfrog
-tar czvf dist/wmfrog.tgz --exclude='*.svn' Src CHANGES COPYING HINTS INSTALL
+tar czvf dist/wmfrog-${version}.tgz --exclude='*.svn' Src CHANGES COPYING HINTS INSTALL
 cd Src
 make clean
 make
