@@ -15,35 +15,33 @@ You also need to have Perl installed.
 On FreeBSD systems you may need to use gmake instead of make.
 
 To compile it from sources, you will need: make, gcc, libc6, libxpm-dev, libx11-dev, libxext-dev.
-ie: apt-get install libxpm-dev, libx11-dev, libxext-dev
+ie: apt-get install wget libxpm-dev, libx11-dev, libxext-dev
 To run it you will need: perl, wget, libx11-6, libxext6 and libxpm4.
 
 Installation
 -------------------------------------------------------------------------------
-If you have a copy of wmFrog already running you should sut it down before re-installing.
+If you have a copy of wmfrog already running you should sut it down before re-installing.
 
-1) gunzip wmfrog-x.x.x.tar.gz
-1) tar -xvf wmfrog-x.x.x.tar
-2) cd wmfrog/Src/
-3) make clean
-4) make 
-5) make install  (as root).
-6) wmfrog -h & (or 'wmfrog -h' for help)
-7) You need to set the location of perl correctly in /usr/lib/wmfrog if your perl
+- mkdir wmfrog
+- cd wmfrog
+- tar -xzvf wmfrog-x.x.x.tar.gz
+- cd wmfrog/Src/
+- make clean
+- make 
+- sudo make install
+
+You might need to set the location of perl correctly in /usr/lib/wmfrog if your perl
    is not located in /usr/bin/
-
 
 Use
 --------------------------------------------------------------------------------
 Find your METAR station name here: 
 http://www.nws.noaa.gov/tg/siteloc.shtml
 For example Reno, NV is KRNO
-Also you will want to set your Time offset from UTC(GMT), for example Pacific time is GMT+8, so offset is 8
+Also you will want to set your Time offset from UTC(GMT), for example Pacific time is GMT-8, so offset is -8
 
 Start wmfrog, for example
-wmfrog -s KRNO -o 8
+wmfrog -s KRNO -o -8
 
 See wmfrog -h for many more options.
-
-
 
