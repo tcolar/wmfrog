@@ -66,12 +66,12 @@ char* folder;
 int main(int argc, char *argv[]) {
 int		n, s, m, i, dt1, dt2, dt3    ;
 XEvent		event;
-char		command[1024], Line[512], FileName[10];
+char		command[1024], Line[512], FileName[128];
 FILE		*fp;
- char*          Weather;
- char*          Clouds;
- char* tmp1;
- char* tmp2;
+ char*          Weather = NULL;
+ char*          Clouds = NULL;
+ char* tmp1 = NULL;
+ char* tmp2 = NULL;
  int intensity=0;
  char* precip;
  char* desc;
@@ -213,7 +213,7 @@ FILE		*fp;
 	    
 	    dt2 = 0;
 
-	    sprintf(FileName, "%s/%s", folder, StationID);
+	    snprintf(FileName, 128, "%s/%s", folder, StationID);
 		fprintf(stderr,"%s\n\n",FileName);
     	    if ((fp = fopen(FileName, "r")) != NULL){
 	      fscanf(fp, "Hour:%d", &hour);
@@ -238,12 +238,10 @@ FILE		*fp;
 	      keepgoing=1;
 		    {
 
-		do{
-
-		    
-		    tmp1=mystrsep(&Weather,";");
-		    if(tmp1)
-		      {
+		    if(weatherFound) do {
+		    	tmp1=mystrsep(&Weather,";");
+		    	if(tmp1)
+		      	{
 
 			  tmp2=mystrsep(&tmp1,",");
 			    
@@ -289,7 +287,7 @@ FILE		*fp;
 		while(keepgoing);
 		    }
 
-		do{
+		    if(cloudsFound) do {
 		    tmp1=mystrsep(&Clouds,";");
 		    if(tmp1)
 		      {
@@ -571,7 +569,7 @@ UpToDate = 0;
 	    /*
 	     *  Execute Perl script to grab the Latest METAR Report
 	     */
-	    sprintf(command, "/usr/lib/wmfrog/weather.pl %s %s &", StationID, folder);
+	    snprintf(command, 1024, "/usr/lib/wmfrog/weather.pl %s %s &", StationID, folder);
 	    //printf("Retrieveing data\n");
 	    system(command);
 	    ForceDownload = 0;
@@ -844,12 +842,11 @@ char *GetTempDir(char *suffix)
 {
 	uid_t id;
 	struct passwd *userEntry;
-	char * userHome;
+	static char userHome[128];
 	
 	id=getuid();
 	userEntry=getpwuid(id);
-	userHome=userEntry->pw_dir;
-	sprintf(userHome,"%s/%s",userHome,suffix);
+	snprintf(userHome, 128, "%s/%s", userEntry->pw_dir, suffix);
 	return userHome;
 }
 

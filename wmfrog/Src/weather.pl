@@ -57,7 +57,7 @@ $line="";
 if($mode eq "http")
 {
     $i=0;
-    while($i!=6)
+    while($i!=8)
     {
 	$line=<DATA>;
 	$i++;
@@ -65,8 +65,9 @@ if($mode eq "http")
 }
 $newLine=<DATA>;
 $line.=$newLine;
-$newLine=<DATA>;
-$line.=$newLine;
+chomp $line;
+$line=~s/<hr>//;
+$line="METAR $station $line";
 close DATA;
 
 chomp $line;
