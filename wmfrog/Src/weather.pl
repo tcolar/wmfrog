@@ -7,7 +7,6 @@
 #in wich case you should choose ftp.
 $mode="http"; # html || ftp
 
-
 ########################################
 # Start:
 ########################################
@@ -59,8 +58,8 @@ if($mode eq "http")
     $i=0;
     while($i!=8)
     {
-	$line=<DATA>;
-	$i++;
+		$line=<DATA>;
+		$i++;
     }
 }
 $newLine=<DATA>;
@@ -72,27 +71,32 @@ close DATA;
 
 chomp $line;
 @args=split(/\ /,$line);
-
+#print "line: $line";
+#print "args: @args";
 if(debug)
 {
 	#print "@args\n";
 }
 
+#print "line: $line";
 $i=0;
 $station=@args[$i];
 if(($station eq 'METAR') or ($station eq 'SPECI'))
 {
 	$station=@args[$i+1];
-	$i++;
+	$i++
 }
-$i++;
-$i++;#time
+$i++;#date (ln 1)
+$i++;#time (ln 1)
+$i++;#station (ln 2)
+$i++;#datetime (ln 2)
 $wind=@args[$i];
 if($wind eq 'AUTO')
 {
 	$wind=@args[$i+1];
 	$i++;
 }
+#print "wind: $wind";
 $i++;
 $visibility=@args[$i];
 $i++;#Visibility
