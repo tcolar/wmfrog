@@ -1,5 +1,5 @@
 CC     = gcc
-CFLAGS = -O2 -Wall
+CFLAGS = -g #-O2 -Wall
 INCDIR = -I/usr/X11R6/include/X11 -I/usr/X11R6/include
 LIBDIR = -L/usr/X11R6/lib
 # for linux

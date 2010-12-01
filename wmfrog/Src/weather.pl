@@ -5,12 +5,17 @@
 #The Weather data can be retrieved through http of ftp.
 #Http is faster, however this might get broken if NOAA change their webpage layout
 #in wich case you should choose ftp.
+
 $mode="http"; # html || ftp
+
+$debug = 0; # turn On/Off debugging
 
 ########################################
 # Start:
 ########################################
 ($station,$tmpfolder)=@ARGV;
+
+debug("station: $station ; tmpfolder: $tmpfolder");
 
 mkdir($tmpfolder); 
 
@@ -32,25 +37,25 @@ if($mode eq "http")
 {
     while((! ($line=~m/START BODY OF TEXT HERE/)) && !eof(DATA))
     {
-#print ".";
-	$line=<DATA>;
+		$line=<DATA>;
     }
     $i=0;
     while($i!=12 && !eof(DATA))
     {
-#print "*";
-	$line=<DATA>;
-	$i++;
+		$line=<DATA>;
+		$i++;
     }
 }
+
 if(eof(DATA))
 {
-#print "Unreadable HTML source, no point going any further, stopping\n";
-exit(0);
+	debug("Unreadable HTML source, no point going any further, stopping\n");
+	exit(0);
 }
+
 $line=<DATA>;
 chomp $line;
-($crap,$time)=split(/\ /,$line);
+($junk,$time)=split(/\ /,$line);
 ($hour,$minute)=split(/:/,$time);
 $line="";
 if($mode eq "http")
@@ -71,14 +76,11 @@ close DATA;
 
 chomp $line;
 @args=split(/\ /,$line);
-#print "line: $line";
-#print "args: @args";
-if(debug)
-{
-	#print "@args\n";
-}
 
-#print "line: $line";
+debug("line: $line");
+debug("args: @args");
+debug("line: $line");
+
 $i=0;
 $station=@args[$i];
 if(($station eq 'METAR') or ($station eq 'SPECI'))
@@ -96,28 +98,28 @@ if($wind eq 'AUTO')
 	$wind=@args[$i+1];
 	$i++;
 }
-#print "wind: $wind";
+debug("wind: $wind");
+
 $i++;
 $visibility=@args[$i];
 $i++;#Visibility
-if( ! ($visibility=~m/SM/ || ($visibility eq "CAVOK")) )
-{
-	#print "Visibility fraction\n";
-	$i++; # visibility with fractions, ignoring
-}
-$next=@args[$i];
-if($next=~m/FT/)
-{
-	#print "Visibility feet\n";
-	$i++; # visibility in feet, ignoring
-}
+debug("vis: $visibility");
+
+#if( ! ($visibility=~m/SM/ || ($visibility eq "CAVOK") || ($visibility eq "9999") ))
+#{
+#	$i++; # visibility with fractions, not using
+#}
+#$next=@args[$i];
+#if($next=~m/FT/)
+#{
+#	$i++; # visibility in feet, not using
+#}
 
 $tmp="";
 $weather="";
 $clouds="";
 while((! (@args[$i]=~/\//)) && ($i<@args))
 {
-
     $intensity="";
     $desc="";
     $precip="";
@@ -125,67 +127,70 @@ while((! (@args[$i]=~/\//)) && ($i<@args))
     $misc="";
     $j=0;
     $curent=@args[$i];
+    
+    debug("cur : $curent");
+    
     $wasCloud="no";
 
     if($curent=~/^CAVOK/)
-       {
+    {
 	   $clouds.="CAVOK,0;";
 	   $wasCloud="yes";
-       }
+    }
     if($curent=~/^VV/)
     {
-	$clouds.="VV,".substr($curent,2,3).";";
-	$wasNotCloud="yes";
+		$clouds.="VV,".substr($curent,2,3).";";
+		$wasNotCloud="yes";
     }
     if(($curent=~/^CLR/) or ($curent=~/^SCK/) or ($curent=~/^FEW/) or ($curent=~/^SCT/)  or ($curent=~/^BKN/)   or ($curent=~/^OVC/))
-       {
+    {
 	   $clouds.=substr($curent,0,3).",".substr($curent,3,3).";";	   
 	   $wasCloud="yes";
-       }
+    }
 
-if(($wasCloud ne "yes"))
-{
-	if(length($curent)>0)
+	if(($wasCloud ne "yes"))
 	{
-# Should be weather
-    if($curent=~/^\-/)
-    {
-	$intensity="-";
-	$j=1;
-    }
-    if($curent=~/^\+/)
-    {
-	$intensity="+";
-        $j=1;	
-    }
-    if($curent=~/^VC/)
-    {
-	$j=2;
-    }
-    $curent=substr($curent,$j);
-    if(($curent=~/^MI/) or ($curent=~/^PR/) or ($curent=~/^BC/) or ($curent=~/^DR/) or ($curent=~/^BL/) or ($curent=~/^SH/) or ($curent=~/^TS/) or ($curent=~/^FZ/) )
-    {
-	$desc=substr($curent,0,2);
-	$curent=substr($curent,2);
-    }
-    if(($curent=~/^DZ/) or ($curent=~/^RA/) or ($curent=~/^SN/) or ($curent=~/^SG/) or ($curent=~/^IC/) or ($curent=~/^PE/) or ($curent=~/^GR/) or ($curent=~/^GX/) or ($curent=~/^UP/))
-    {
-	$precip=substr($curent,0,2);
-	$curent=substr($curent,2);
-    }
-    if(($curent=~/^BR/) or ($curent=~/^FG/) or ($curent=~/^FU/) or ($curent=~/^VA/) or ($curent=~/^DU/) or ($curent=~/^SA/) or ($curent=~/^HZ/) or ($curent=~/^PY/))
-    {
-	$obsc=substr($curent,0,2);
-	$curent=substr($curent,2);
-    }
-    if(($curent=~/^PO/) or ($curent=~/^SQ/) or ($curent=~/^FC/) or ($curent=~/^SS/))
-    {
-	$misc=substr($curent,0,2);
-    }
-    $weather.="$intensity,$desc,$precip,$obsc,$misc;";
-    }
-
-}    
+		if(length($curent)>0)
+		{
+			# Should be weather
+			if($curent=~/^\-/)
+			{
+				$intensity="-";
+				$j=1;
+			}
+			if($curent=~/^\+/)
+			{
+				$intensity="+";
+				$j=1;	
+			}
+			if($curent=~/^VC/)
+			{
+				$j=2;
+			}
+			$curent=substr($curent,$j);
+		    if(($curent=~/^MI/) or ($curent=~/^PR/) or ($curent=~/^BC/) or ($curent=~/^DR/) or ($curent=~/^BL/) or ($curent=~/^SH/) or ($curent=~/^TS/) or ($curent=~/^FZ/) )
+		    {
+				$desc=substr($curent,0,2);
+				$curent=substr($curent,2);
+		    }
+		    if(($curent=~/^DZ/) or ($curent=~/^RA/) or ($curent=~/^SN/) or ($curent=~/^SG/) or ($curent=~/^IC/) or ($curent=~/^PE/) or ($curent=~/^GR/) or ($curent=~/^GX/) or ($curent=~/^UP/))
+		    {
+				$precip=substr($curent,0,2);
+				$curent=substr($curent,2);
+		    }
+		    if(($curent=~/^BR/) or ($curent=~/^FG/) or ($curent=~/^FU/) or ($curent=~/^VA/) or ($curent=~/^DU/) or ($curent=~/^SA/) or ($curent=~/^HZ/) or ($curent=~/^PY/))
+		    {
+				$obsc=substr($curent,0,2);
+				$curent=substr($curent,2);
+		    }
+		    if(($curent=~/^PO/) or ($curent=~/^SQ/) or ($curent=~/^FC/) or ($curent=~/^SS/))
+		    {
+				$misc=substr($curent,0,2);
+		    }
+		    $weather.="$intensity,$desc,$precip,$obsc,$misc;";
+		}
+	
+	}    
     $i++;
 }
 ($temp,$dew)=split(/\//,@args[$i]);
@@ -246,6 +251,18 @@ if($dew eq "")
 	$station="";
 }
 
+debug("Hour:$hour");
+debug("Minute:$minute");
+debug("Station:$station");
+debug("WindDir:$dir");
+debug("WindSpeed:$speed");
+debug("WindGust:$gust");
+debug("Weather:$weather");
+debug("Clouds:$clouds");
+debug("Temp:$temp");
+debug("Dew:$dew");
+
+
 #check for ok temperature
 open(GREP, "grep Temp $tmpfolder/${station} | ");
 $templine=<GREP>;
@@ -268,31 +285,41 @@ $templine=~m/^Temp:(.*)$/;
 	}
 	else
 	{
-	#invalid
-	$station="";
+		$station="";
 	}
 }
 close GREP;
 
-#print "$$station\n";
+debug("Station: $station");
+
 if(length($station)==4)
 {
-#print "OK\n";
-open(FILE,"> $tmpfolder/${station}");
-print FILE "Hour:$hour\n";
-print FILE "Minute:$minute\n";
-print FILE "Station:$station\n";
-print FILE "WindDir:$dir\n";
-print FILE "WindSpeed:$speed\n";
-print FILE "WindGust:$gust\n";
-print FILE "Weather:$weather\n";
-print FILE "Clouds:$clouds\n";
-print FILE "Temp:$temp\n";
-print FILE "Dew:$dew\n";
-close FILE
+	debug("Data OK");
+	open(FILE,"> $tmpfolder/${station}");
+	print FILE "Hour:$hour\n";
+	print FILE "Minute:$minute\n";
+	print FILE "Station:$station\n";
+	print FILE "WindDir:$dir\n";
+	print FILE "WindSpeed:$speed\n";
+	print FILE "WindGust:$gust\n";
+	print FILE "Weather:$weather\n";
+	print FILE "Clouds:$clouds\n";
+	print FILE "Temp:$temp\n";
+	print FILE "Dew:$dew\n";
+	close FILE
 }
 else
 {
-#print "Invalid data, not writing to file, stopping\n";
+	debug("Invalid data, not writing to file, stopping\n");
 }
 
+# end main
+
+sub debug()
+{
+	my($str) = @_;
+	if($debug)
+	{
+		print "$str\n";
+	}
+}
