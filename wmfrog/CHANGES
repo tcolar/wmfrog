@@ -6,7 +6,7 @@ Version         Description
 0.2.2		08/27/2010 : Fixed wind parsing
 0.2.1		08/2010 : Fixed possible buffer overflows as reported by Petr Pisar / Jim Ramsey
 		Fixed weather.pl for change in weather format as reported bt Ben Parees
-0.2.0	Fixed potentail security risk, by storing temp data in ~/.wmapps/ rather than /tmp
+0.2.0           Fixed potential security risk, by storing temp data in ~/.wmapps/ rather than /tmp
 0.1.6		*** Application name changed to wmfrog instead of wmFrog ***
 		Man page added by Marc Brockschmidt
 		Change where made to the data fetching script, so that no more eroneous temperatures should be reported (visibility as fractions problems)
