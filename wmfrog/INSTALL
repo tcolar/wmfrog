@@ -26,8 +26,9 @@ If you have a copy of wmfrog already running you should sut it down before re-in
 - cd wmfrog
 - tar -xzvf wmfrog-x.x.x.tar.gz
 - cd wmfrog/Src/
-- make clean
-- make 
+If you want to build from source, do this: (you can skip to use the prebuilt binary)
+		- make clean
+		- make 
 - sudo make install
 
 You might need to set the location of perl correctly in /usr/lib/wmfrog if your perl
