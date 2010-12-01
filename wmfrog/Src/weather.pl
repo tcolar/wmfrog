@@ -109,11 +109,11 @@ debug("vis: $visibility");
 #{
 #	$i++; # visibility with fractions, not using
 #}
-#$next=@args[$i];
-#if($next=~m/FT/)
-#{
-#	$i++; # visibility in feet, not using
-#}
+$next=@args[$i];
+if($next=~m/\//)
+{
+	$i++; # fractional visibility, skipping
+}
 
 $tmp="";
 $weather="";
