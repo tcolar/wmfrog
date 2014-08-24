@@ -7,5 +7,5 @@ cd ..
 cp Src/wmfrog dist
 cp Src/weather.pl dist
 
-rm Src/*.o 
+make -C Src clean
 tar czvf dist/wmfrog-${version}.tgz --exclude='*.svn' Src CHANGES COPYING HINTS INSTALL
