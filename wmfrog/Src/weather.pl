@@ -79,7 +79,7 @@ if ( $mode eq "http" )
 
     $i = 0;
 
-    while ( $i != 12  and  not eof DATA )
+    while ( $i != 21  and  not eof DATA )
     {
 	$line = <DATA>;
 	$i++;
