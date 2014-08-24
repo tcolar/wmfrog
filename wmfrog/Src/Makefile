@@ -8,7 +8,7 @@ LIBS   = -lXpm -lX11 -lXext
 # LIBS   = -lXpm -lX11 -lXext -lsocket
 PREFIX=/usr
 
-OBJS   = wmFrog.o \
+OBJS   = wmfrog.o \
          xutils.o
 
 
@@ -16,10 +16,10 @@ OBJS   = wmFrog.o \
 	$(CC) $(CFLAGS) -D$(shell echo `uname -s`) -c $< -o $*.o $(INCDIR)
 
 
-all:	wmFrog.o wmFrog 
+all:	wmfrog.o wmfrog 
 
-wmFrog.o: frog.xpm frog.xbm
-wmFrog:	$(OBJS) 
+wmfrog.o: frog.xpm frog.xbm
+wmfrog:	$(OBJS) 
 	$(CC) $(CFLAGS) $(SYSTEM) -o wmfrog $^ $(INCDIR) $(LIBDIR) $(LIBS)
 install:
 		mkdir -p "$(DESTDIR)$(PREFIX)/bin"
