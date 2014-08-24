@@ -367,32 +367,35 @@ debug("Dew:$dew");
 
 # Check for ok temperature
 
-open GREP, "grep Temp $tmpfolder/${station} | ";
-$templine = <GREP>;
-
-$templine = ~m/^Temp:(.*)$/;
-
+if ( -f "$tmpfolder/$station" )
 {
-    if ( $temp > -50  and  $temp < 150 )
+    open GREP, "grep Temp $tmpfolder/${station} | ";
+    $templine = <GREP>;
+
+    $templine = ~m/^Temp:(.*)$/;
+
     {
-	if ( $lasttemp > -50  and  $lasttemp < 150 )
+	if ( $temp > -50  and  $temp < 150 )
 	{
-	    if ( $temp > -2  and  $temp < 2 )
+	    if ( $lasttemp > -50  and  $lasttemp < 150 )
 	    {
-		if ( $lasttemp > 7  or  $lasttemp < -7 )
+		if ( $temp > -2  and  $temp < 2 )
 		{
-		    $station = "";	# probably invalid
+		    if ( $lasttemp > 7  or  $lasttemp < -7 )
+		    {
+			$station = "";	# probably invalid
+		    }
 		}
 	    }
 	}
+	else
+	{
+	    $station = "";
+	}
     }
-    else
-    {
-	$station = "";
-    }
-}
 
-close GREP;
+    close GREP;
+}
 
 debug("Station: $station");
 
