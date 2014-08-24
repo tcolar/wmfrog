@@ -321,7 +321,7 @@ void ParseCMDLine(int argc, char *argv[]) {
                 print_usage();
                 exit(-1);
             } else if (sscanf(argv[i + 1], "%d", &maxWind) != 1) {
-                fprintf(stderr, "Dont understand the max wind value have entered (%s).\n", argv[i + 1]);
+                fprintf(stderr, "Don't understand the max wind value have entered (%s).\n", argv[i + 1]);
                 print_usage();
                 exit(-1);
             }
@@ -331,7 +331,7 @@ void ParseCMDLine(int argc, char *argv[]) {
                 print_usage();
                 exit(-1);
             } else if (sscanf(argv[i + 1], "%d", &timeOffset) != 1) {
-                fprintf(stderr, "Dont understand the time offset value have entered (%s).\n", argv[i + 1]);
+                fprintf(stderr, "Don't understand the time offset value have entered (%s).\n", argv[i + 1]);
                 print_usage();
                 exit(-1);
             }
@@ -362,7 +362,7 @@ void ParseCMDLine(int argc, char *argv[]) {
                 exit(-1);
             } else if (sscanf(argv[i + 1], "%ld", &UpdateDelay) != 1) {
 
-                fprintf(stderr, "Dont understand the delay time you have entered (%s).\n", argv[i + 1]);
+                fprintf(stderr, "Don't understand the delay time you have entered (%s).\n", argv[i + 1]);
                 print_usage();
                 exit(-1);
             }
