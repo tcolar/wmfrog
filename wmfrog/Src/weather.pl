@@ -114,7 +114,7 @@ $newLine = <DATA>;
 $line   .= $newLine;
 chomp $line;
 
-$line = ~s/<hr>//;
+$line =~ s/<hr>//;
 $line = "METAR $station $line";
 
 close DATA;
@@ -178,7 +178,7 @@ while (  not $args[$i] =~ /\//  and  $i < @args )
     $obsc	= "";
     $misc	= "";
     $j		= 0;
-    $curent	= $args[$i]
+    $curent	= $args[$i];
     $wasCloud   = "no";
 
     debug("cur : $curent");
