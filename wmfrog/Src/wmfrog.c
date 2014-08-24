@@ -407,9 +407,9 @@ void print_usage() {
     printf("\t-l\t\t\t\tSet a label to replace the station ID \n\n");
 
     printf("\n\nTo find out more about the METAR/TAF system, look at:\n");
-    printf("	 http://www.nws.noaa.gov/oso/oso1/oso12/metar.htm \n\n");
+    printf("	 http://nws.noaa.gov/ops2/Surface/metar_taf.htm \n\n");
     printf("To find your city Metar code go to  NOAA's ""Meteorological Station Information\nLookup"" page at:\n\n");
-    printf("	 http://www.nws.noaa.gov/oso/siteloc.shtml\n\n");
+    printf("	 http://www.nws.noaa.gov/tg/siteloc.php\n\n");
     printf("\n Thibaut Colar http://www.colar.net/wmapps/\n\n");
 
 }
