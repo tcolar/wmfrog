@@ -321,7 +321,7 @@ void ParseCMDLine(int argc, char *argv[]) {
                 print_usage();
                 exit(-1);
             } else if (sscanf(argv[i + 1], "%d", &maxWind) != 1) {
-                fprintf(stderr, "Dont understand the max wind value have entered (%s).\n", argv[i + 1]);
+                fprintf(stderr, "Don't understand the max wind value have entered (%s).\n", argv[i + 1]);
                 print_usage();
                 exit(-1);
             }
@@ -331,7 +331,7 @@ void ParseCMDLine(int argc, char *argv[]) {
                 print_usage();
                 exit(-1);
             } else if (sscanf(argv[i + 1], "%d", &timeOffset) != 1) {
-                fprintf(stderr, "Dont understand the time offset value have entered (%s).\n", argv[i + 1]);
+                fprintf(stderr, "Don't understand the time offset value have entered (%s).\n", argv[i + 1]);
                 print_usage();
                 exit(-1);
             }
@@ -362,7 +362,7 @@ void ParseCMDLine(int argc, char *argv[]) {
                 exit(-1);
             } else if (sscanf(argv[i + 1], "%ld", &UpdateDelay) != 1) {
 
-                fprintf(stderr, "Dont understand the delay time you have entered (%s).\n", argv[i + 1]);
+                fprintf(stderr, "Don't understand the delay time you have entered (%s).\n", argv[i + 1]);
                 print_usage();
                 exit(-1);
             }
@@ -407,9 +407,9 @@ void print_usage() {
     printf("\t-l\t\t\t\tSet a label to replace the station ID \n\n");
 
     printf("\n\nTo find out more about the METAR/TAF system, look at:\n");
-    printf("	 http://www.nws.noaa.gov/oso/oso1/oso12/metar.htm \n\n");
+    printf("	 http://nws.noaa.gov/ops2/Surface/metar_taf.htm \n\n");
     printf("To find your city Metar code go to  NOAA's ""Meteorological Station Information\nLookup"" page at:\n\n");
-    printf("	 http://www.nws.noaa.gov/oso/siteloc.shtml\n\n");
+    printf("	 http://www.nws.noaa.gov/tg/siteloc.php\n\n");
     printf("\n Thibaut Colar http://www.colar.net/wmapps/\n\n");
 
 }
