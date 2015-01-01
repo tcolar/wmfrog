@@ -13,14 +13,14 @@ OBJS   = wmfrog.o \
 
 
 .c.o:
-	$(CC) $(CFLAGS) -D$(shell echo `uname -s`) -c $< -o $*.o $(INCDIR)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -D$(shell echo `uname -s`) -c $< -o $*.o $(INCDIR)
 
 
 all:	wmfrog.o wmfrog 
 
 wmfrog.o: frog.xpm frog.xbm
 wmfrog:	$(OBJS) 
-	$(CC) $(CFLAGS) $(SYSTEM) -o wmfrog $^ $(INCDIR) $(LIBDIR) $(LIBS)
+	$(CC) $(LDFLAGS) $(SYSTEM) -o wmfrog $^ $(INCDIR) $(LIBDIR) $(LIBS)
 install:
 		mkdir -p "$(DESTDIR)$(PREFIX)/bin"
 		mkdir -p "$(DESTDIR)$(PREFIX)/lib/wmfrog"
