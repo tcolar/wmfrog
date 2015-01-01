@@ -1,0 +1,49 @@
+.TH wmfrog 1 "2015-01-01" "wmfrog" "User Commands"
+.SH "NAME"
+wmfrog \- a dockapp for showing weather in graphical way
+.SH "SYNOPSIS"
+wmfrog [options] \-station <METAR station id>
+.SH "OPTIONS"
+.IP "\fB\-delay minutes\fR" 4
+Override time (in minutes) between updates. Default is 15.
+.IP "\fB\-m, \-metric\fR" 4
+Display Temperature in metric unit: Celsius.
+.IP "\fB\-o offset\fR" 4
+Time offset of location from UTC. Positive or negative integer
+expressed in hours, like +1 or \-7.
+.IP "\fB\-s, \-station\fR" 4
+Required option. The 4\-character METAR Station ID. See
+http://en.wikipedia.org/wiki/METAR
+.IP "\fB\-w knots\fR" 4
+Set the maximum wind in KNOTS for percentage of max / scaling. Default
+is 50 Knots.
+.IP "\fB\-tmp directory\fR" 4
+Set the temporary directory where the METAR data files are downloaded
+Default is /tmp.
+.IP "\fB\-l label\fR" 4
+Set displayed text to 4 character (max) label to replace the METAR
+station id.
+.SH "DESCRIPTION"
+A dockapp for weather reports. Includes clouds (clear, few,
+scattered, broken, overcast ...); Precipitations (drizzle, rain, snow,
+ice crystals: light/moderate or heavy); Special weather (Blowing wind
+/ Freezing / Thunderstorm, funnel cloud...); Humidity percentage; Wind
+speed (average & gust); Wind Direction; Temperature (Celsius or
+Fahrenheit); Station name can be configured and weather report time is
+displayed.
+.PP
+To find out more about the METAR/TAF system, see
+http://nws.noaa.gov/ops2/Surface/metar_taf.htm
+.PP
+To find your city Metar code go to http://www.nws.noaa.gov/tg/siteloc.php
+.SH "FILES"
+.IP "/tmp/<station\-id>/" 4
+Stored data files. The directory can be changed with option \fB\-tmp\fR
+.SH "AUTHORS"
+program was written by Thibaut Colar <tcolar@colar.net>.
+.PP
+This manual page is based on 0.1.6 version of the program. Updated by Jari
+Aalto <jari.aalto@cante.net> and Doug Torrance <dtorrance@monmouthcollege.edu>.
+Released under license GNU GPL v2 or (at
+your option) any later version. For more information about license, visit
+<http://www.gnu.org/copyleft/gpl.html>.
