@@ -13,19 +13,21 @@ OBJS   = wmfrog.o \
 
 
 .c.o:
-	$(CC) $(CFLAGS) -D$(shell echo `uname -s`) -c $< -o $*.o $(INCDIR)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -D$(shell echo `uname -s`) -c $< -o $*.o $(INCDIR)
 
 
 all:	wmfrog.o wmfrog 
 
 wmfrog.o: frog.xpm frog.xbm
 wmfrog:	$(OBJS) 
-	$(CC) $(CFLAGS) $(SYSTEM) -o wmfrog $^ $(INCDIR) $(LIBDIR) $(LIBS)
+	$(CC) $(LDFLAGS) $(SYSTEM) -o wmfrog $^ $(INCDIR) $(LIBDIR) $(LIBS)
 install:
 		mkdir -p "$(DESTDIR)$(PREFIX)/bin"
 		mkdir -p "$(DESTDIR)$(PREFIX)/lib/wmfrog"
+		mkdir -p "$(DESTDIR)$(PREFIX)/share/man/man1"
 		cp wmfrog "$(DESTDIR)$(PREFIX)/bin"
 		cp weather.pl "$(DESTDIR)$(PREFIX)/lib/wmfrog"
+		cp wmfrog.1 "$(DESTDIR)$(PREFIX)/share/man/man1"
 clean:
 	for i in $(OBJS) ; do \
 		rm -f $$i; \
