@@ -91,7 +91,9 @@ int main(int argc, char *argv[]) {
      */
     ParseCMDLine(argc, argv);
 
-    folder = GetTempDir(".wmapps");
+    if (!folder) {
+        folder = GetTempDir(".wmapps");
+    }
 
     initXwindow(argc, argv);
 
@@ -343,7 +345,7 @@ void ParseCMDLine(int argc, char *argv[]) {
                 print_usage();
                 exit(-1);
             }
-            strcpy(folder, argv[++i]);
+            folder = strdup(argv[++i]);
 
 
         } else if ((!strcmp(argv[i], "-station")) || (!strcmp(argv[i], "-s"))) {
@@ -492,7 +494,7 @@ void UpdateData() {
     /*
      *  Execute Perl script to grab the Latest METAR Report
      */
-    snprintf(command, 1024, "/usr/lib/wmfrog/weather.pl %s %s", StationID, folder);
+    snprintf(command, 1024, "/usr/share/wmfrog/weather.pl %s %s", StationID, folder);
     //printf("Retrieveing data\n");
     ign = system(command);
     snprintf(FileName, 128, "%s/%s", folder, StationID);

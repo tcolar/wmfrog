@@ -23,10 +23,10 @@ wmfrog:	$(OBJS)
 	$(CC) $(LDFLAGS) $(SYSTEM) -o wmfrog $^ $(INCDIR) $(LIBDIR) $(LIBS)
 install:
 		mkdir -p "$(DESTDIR)$(PREFIX)/bin"
-		mkdir -p "$(DESTDIR)$(PREFIX)/lib/wmfrog"
+		mkdir -p "$(DESTDIR)$(PREFIX)/share/wmfrog"
 		mkdir -p "$(DESTDIR)$(PREFIX)/share/man/man1"
 		cp wmfrog "$(DESTDIR)$(PREFIX)/bin"
-		cp weather.pl "$(DESTDIR)$(PREFIX)/lib/wmfrog"
+		cp weather.pl "$(DESTDIR)$(PREFIX)/share/wmfrog"
 		cp wmfrog.1 "$(DESTDIR)$(PREFIX)/share/man/man1"
 clean:
 	for i in $(OBJS) ; do \

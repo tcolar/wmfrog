@@ -27,6 +27,8 @@
 #       faster, however this might get broken if NOAA change their
 #       webpage layout in wich case you should choose ftp.
 
+use Geo::METAR;
+
 $mode="ftp"; # html || ftp
 
 $debug = 0; # turn On/Off debugging
@@ -116,180 +118,124 @@ $newLine = <DATA>;
 $line   .= $newLine;
 chomp $line;
 
-$line =~ s/<hr>//;
-$line = "METAR $station $line";
-
 close DATA;
 
-chomp $line;
-@args = split /\ /, $line;
-
-debug("line: $line");
-debug("args: @args");
 debug("line: $line");
 
-$i = 0;
-$station = $args[$i];
+my $m = Geo::METAR->new;
 
-if ( $station eq 'METAR'  or  $station eq 'SPECI' )
-{
-    $station = $args[$i+1];
-    $i++
-}
+$m->metar ($line);
 
-$i++;                                   # date (ln 1)
-$i++;                                   # time (ln 1)
-$i++;                                   # station (ln 2)
-$i++;                                   # datetime (ln 2)
-$wind = $args[$i];
-
-if ( $wind eq 'AUTO' )
-{
-    $wind = $args[$i+1];
-    $i++;
-}
+$wind = $m->{wind};
 
 debug("wind: $wind");
 
-$i++;
-$visibility = $args[$i];
-$i++;                                   # Visibility
+$visibility = $m->{visibility};
 
 debug("vis: $visibility");
 
-#unless( $visibility =~ m/SM/  or  $visibility eq "CAVOK"  or  $visibility eq "9999" )
-#{
-#       $i++; # visibility with fractions, not using
-#}
-
-$next = $args[$i];
-
-if ( $next =~ m/\// )
-{
-    $i++;			     # fractional visibility, skipping
-}
-
 $weather = "";
-$clouds  = " ";
+$clouds = " ";
 
-while (  not $args[$i] =~ /\//  and  $i < @args )
+if ($m->{sky}[0] eq "CAVOK")
 {
-    $intensity  = "";
-    $desc	= "";
-    $precip	= "";
-    $obsc	= "";
-    $misc	= "";
-    $j		= 0;
-    $curent	= $args[$i];
-    $wasCloud   = "no";
-
-    debug("cur : $curent");
-
-    if ( $curent =~ /^CAVOK/ )
+    $clouds .= "CAVOK,0;";
+}
+else
+{
+    if (!@{$m->{sky}})
     {
-           $clouds .= "CAVOK,0;";
-           $wasCloud = "yes";
+        if (my ($vv) = grep { s/^VV(\d+)/$1/ } split /\s+/, $line)
+        {
+            $clouds .= "VV,$vv;";
+        }
+    }
+    else
+    {
+        $clouds .= join (",", m/(.{3})(.{3})/) . ";" for @{$m->{sky}};
     }
 
-    if ( $curent =~ /^VV/ )
+    for my $curent (@{$m->{weather}})
     {
-            $clouds .= "VV,".substr($curent,2,3).";";
-            # Not used: $wasNotCloud = "yes";
+        $intensity = "";
+        $desc      = "";
+        $precip    = "";
+        $obsc      = "";
+        $misc      = "";
+        $j         = 0;
+
+        if ( $curent =~ /^\-/ )
+        {
+            $intensity = "-";
+            $j = 1;
+        }
+
+        if ( $curent =~ /^\+/ )
+        {
+            $intensity="+";
+            $j = 1;
+        }
+
+        if ( $curent =~ /^VC/ )
+        {
+            $j = 2;
+        }
+
+        $curent = substr $curent, $j;
+
+        if ( $curent =~ /^MI/ or
+             $curent =~ /^PR/ or
+             $curent =~ /^BC/ or
+             $curent =~ /^DR/ or
+             $curent =~ /^BL/ or
+             $curent =~ /^SH/ or
+             $curent =~ /^TS/ or
+             $curent =~ /^FZ/ )
+        {
+            $desc   = substr $curent, 0, 2;
+            $curent = substr $curent, 2;
+        }
+
+        if ( $curent=~/^DZ/ or
+             $curent=~/^RA/ or
+             $curent=~/^SN/ or
+             $curent=~/^SG/ or
+             $curent=~/^IC/ or
+             $curent=~/^PE/ or
+             $curent=~/^GR/ or
+             $curent=~/^GX/ or
+             $curent=~/^UP/ )
+        {
+            $precip = substr $curent, 0, 2;
+            $curent = substr $curent, 2;
+        }
+
+        if ( $curent=~/^BR/ or
+             $curent=~/^FG/ or
+             $curent=~/^FU/ or
+             $curent=~/^VA/ or
+             $curent=~/^DU/ or
+             $curent=~/^SA/ or
+             $curent=~/^HZ/ or
+             $curent=~/^PY/ )
+        {
+            $obsc   = substr $curent, 0, 2;
+            $curent = substr $curent, 2;
+        }
+
+        if ( $curent=~/^PO/ or
+             $curent=~/^SQ/ or
+             $curent=~/^FC/ or
+             $curent=~/^SS/ )
+        {
+            $misc = substr $curent, 0, 2;
+        }
+
+        $weather .= "$intensity,$desc,$precip,$obsc,$misc;" ;
     }
-
-    if ( $curent =~ /^CLR/ or
-	 $curent =~ /^SCK/ or
-	 $curent =~ /^FEW/ or
-	 $curent =~ /^SCT/ or
-	 $curent =~ /^BKN/ or
-	 $curent =~ /^OVC/ )
-    {
-           $clouds .= substr($curent, 0, 3) . ","
-	            . substr($curent, 3, 3) . ";" ;
-
-           $wasCloud = "yes";
-    }
-
-    if ( $wasCloud ne "yes")
-    {
-	if ( length $curent > 0 )
-	{
-	    if ( $curent =~ /^\-/ )	# Should be weather
-	    {
-		$intensity = "-";
-		$j = 1;
-	    }
-
-	    if ( $curent =~ /^\+/ )
-	    {
-		$intensity="+";
-		$j = 1;
-	    }
-
-	    if ( $curent =~ /^VC/ )
-	    {
-		$j = 2;
-	    }
-
-	    $curent = substr $curent, $j;
-
-	    if ( $curent =~ /^MI/ or
-		 $curent =~ /^PR/ or
-		 $curent =~ /^BC/ or
-		 $curent =~ /^DR/ or
-		 $curent =~ /^BL/ or
-		 $curent =~ /^SH/ or
-		 $curent =~ /^TS/ or
-		 $curent =~ /^FZ/ )
-	    {
-		$desc   = substr $curent, 0, 2;
-		$curent = substr $curent, 2;
-	    }
-
-	    if ( $curent=~/^DZ/ or
-		 $curent=~/^RA/ or
-		 $curent=~/^SN/ or
-		 $curent=~/^SG/ or
-		 $curent=~/^IC/ or
-		 $curent=~/^PE/ or
-		 $curent=~/^GR/ or
-		 $curent=~/^GX/ or
-		 $curent=~/^UP/ )
-	    {
-		$precip = substr $curent, 0, 2;
-		$curent = substr $curent, 2;
-	    }
-
-	    if ( $curent=~/^BR/ or
-		 $curent=~/^FG/ or
-		 $curent=~/^FU/ or
-		 $curent=~/^VA/ or
-		 $curent=~/^DU/ or
-		 $curent=~/^SA/ or
-		 $curent=~/^HZ/ or
-		 $curent=~/^PY/ )
-	    {
-		$obsc   = substr $curent, 0, 2;
-		$curent = substr $curent, 2;
-	    }
-
-	    if ( $curent=~/^PO/ or
-		 $curent=~/^SQ/ or
-		 $curent=~/^FC/ or
-		 $curent=~/^SS/ )
-	    {
-		$misc = substr $curent, 0, 2;
-	    }
-
-	    $weather .= "$intensity,$desc,$precip,$obsc,$misc;" ;
-	}
-
-    }
-
-    $i++;
 }
 
-($temp, $dew) = split /\//, $args[$i];
+($temp, $dew) = split /\//, $m->{temp_dew};
 
 $dir   = substr $wind, 0, 3;
 $speed = substr $wind, 3, 2;
