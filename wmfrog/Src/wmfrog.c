@@ -492,7 +492,7 @@ void UpdateData() {
     /*
      *  Execute Perl script to grab the Latest METAR Report
      */
-    snprintf(command, 1024, "/usr/lib/wmfrog/weather.pl %s %s", StationID, folder);
+    snprintf(command, 1024, "/usr/share/wmfrog/weather.pl %s %s", StationID, folder);
     //printf("Retrieveing data\n");
     ign = system(command);
     snprintf(FileName, 128, "%s/%s", folder, StationID);
